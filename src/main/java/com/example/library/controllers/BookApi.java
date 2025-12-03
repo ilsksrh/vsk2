@@ -5,6 +5,7 @@ import com.example.library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,9 +17,8 @@ public class BookApi {
     @Autowired
     private BookService bookService;
 
-    @GetMapping("/admin")
-
-    public List<BookDto> getAllForAdmin() {
+    @GetMapping()
+    public List<BookDto> getAll() {
         return bookService.getAll();
     }
 
@@ -39,6 +39,8 @@ public class BookApi {
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         if (bookService.deleteBook(id)) {

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  app:
+    image: myapp
+    container_name: spring_app
+    build: .
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/library_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: sara1234
+    ports:
+      - "8008:8008"
+
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: library_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sara1234
+    ports:
+      - "5432:5432"
